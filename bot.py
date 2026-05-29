@@ -12,74 +12,50 @@ logging.basicConfig(level=logging.INFO)
 TOKEN = os.environ.get("BOT_TOKEN")
 
 # =========================
-# MARKET DATA
-# =========================
-
-market = {
-    "btc_signal": "SELL",
-    "btc_score": 82,
-    "btc_entry": "73600",
-    "btc_sl": "74800",
-    "btc_tp1": "72000",
-    "btc_tp2": "70500",
-
-    "gold_signal": "BUY",
-    "gold_score": 91,
-    "gold_entry": "2348",
-    "gold_sl": "2335",
-    "gold_tp1": "2365",
-    "gold_tp2": "2380",
-}
-
-# =========================
-# START COMMAND
+# COMMANDS
 # =========================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🤖 البوت شغال بنجاح\n\n"
+        "/gold = تحليل الذهب\n"
+        "/btc = تحليل البيتكوين\n"
+        "/fear = مؤشر الخوف"
+    )
 
-    message = f"""
-🤖 SMART MACRO TRADING AI
+async def gold(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🟡 GOLD ANALYSIS\n\n"
+        "الاتجاه الحالي: مراقبة\n"
+        "راقب قوة الدولار قبل الدخول."
+    )
 
-🟠 BTC SIGNAL
-Signal: {market['btc_signal']}
-Score: {market['btc_score']}/100
+async def btc(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "₿ BTC ANALYSIS\n\n"
+        "السوق متذبذب حالياً.\n"
+        "يفضل انتظار تأكيد الاتجاه."
+    )
 
-Entry: {market['btc_entry']}
-SL: {market['btc_sl']}
-TP1: {market['btc_tp1']}
-TP2: {market['btc_tp2']}
-
-
-🥇 GOLD SIGNAL
-Signal: {market['gold_signal']}
-Score: {market['gold_score']}/100
-
-Entry: {market['gold_entry']}
-SL: {market['gold_sl']}
-TP1: {market['gold_tp1']}
-TP2: {market['gold_tp2']}
-
-📊 Analysis:
-- Dollar strength
-- Fear & Greed Index
-- Smart Money
-- Macro trend
-- COT data
-"""
-
-    await update.message.reply_text(message)
+async def fear(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "😨 مؤشر الخوف والطمع:\n"
+        "السوق حالياً بحالة خوف."
+    )
 
 # =========================
 # MAIN
 # =========================
 
 def main():
-
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("gold", gold))
+    app.add_handler(CommandHandler("btc", btc))
+    app.add_handler(CommandHandler("fear", fear))
 
-    print("BOT RUNNING...")
+    print("BOT IS RUNNING...")
 
     app.run_polling()
 
